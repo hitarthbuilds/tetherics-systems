@@ -129,7 +129,7 @@ export function RecordDrawer() {
       {recordsOpen === "ventures" ? (
         <>
           <h2>SYSTEM<br />RECORDS.</h2>
-          <article><span>TS/SYS-001 / RESEARCH DIRECTION</span><h3>SEERFLOW</h3><p>A proposed commerce control system. No public deployment or performance evidence is attached to this record.</p><a href="/records/seerflow">OPEN PUBLIC RECORD ↗</a></article>
+          <article><span>TS/SYS-001 / LIVE PRODUCT SITE</span><h3>SEERFLOW</h3><p>Business command centre for Indian D2C, connected to its public product source and a limitations-aware Tetherics record.</p><a href="/records/seerflow">OPEN PUBLIC RECORD ↗</a></article>
           <article className="is-restricted"><span>TS/SYS-002 / RESTRICTED</span><h3>NO PUBLIC SYSTEM RECORD.</h3></article>
         </>
       ) : null}

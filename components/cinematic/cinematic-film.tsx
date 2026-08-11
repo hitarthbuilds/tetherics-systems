@@ -11,9 +11,13 @@ export function CinematicFilm() {
   const pendingTime = useRef(0);
   const scheduled = useRef<number | null>(null);
   const [ready, setReady] = useState(false);
+  const [sourceEnabled, setSourceEnabled] = useState(false);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const enableFallback = () => setSourceEnabled(true);
+    if (reducedMotion) enableFallback();
+    window.addEventListener("tetherics:3d-unavailable", enableFallback);
 
     const update = (event: WindowEventMap["tetherics:frame"]) => {
       if (reducedMotion) return;
@@ -32,20 +36,26 @@ export function CinematicFilm() {
 
     window.addEventListener("tetherics:frame", update);
     return () => {
+      window.removeEventListener("tetherics:3d-unavailable", enableFallback);
       window.removeEventListener("tetherics:frame", update);
       if (scheduled.current !== null) window.cancelAnimationFrame(scheduled.current);
     };
   }, []);
 
+  useEffect(() => {
+    if (sourceEnabled) videoRef.current?.load();
+  }, [sourceEnabled]);
+
   return (
     <div className={`cinematic-film${ready ? " is-ready" : ""}`} aria-hidden="true">
+      <div className="cinematic-film__poster" />
       <video
         ref={videoRef}
         muted
         playsInline
-        preload="auto"
+        preload="metadata"
         poster="/cinematic/tetherics-machine-poster-4k.jpg"
-        onLoadedData={(event) => {
+        onLoadedMetadata={(event) => {
           event.currentTarget.pause();
           event.currentTarget.currentTime = pendingTime.current;
           setReady(true);
@@ -53,7 +63,7 @@ export function CinematicFilm() {
         }}
         onError={() => window.dispatchEvent(new Event("tetherics:cinematic-unavailable"))}
       >
-        <source src="/cinematic/tetherics-machine-4k.mp4" type="video/mp4" />
+        {sourceEnabled ? <source src="/cinematic/tetherics-machine-4k.mp4" type="video/mp4" /> : null}
       </video>
       <div className="cinematic-film__grade" />
       <div className="cinematic-film__provenance">

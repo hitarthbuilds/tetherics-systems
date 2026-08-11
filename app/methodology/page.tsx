@@ -22,7 +22,7 @@ export default function MethodologyPage() {
         <div className="trust-callout"><strong>THIS WEBSITE</strong><p>Sensor confidence, timing, state, recovery and other figures inside the cinematic experience are fictional interface telemetry used to explain a control loop. They are not benchmark results or evidence of a deployed machine.</p></div>
         <table className="trust-table"><thead><tr><th>CONTENT</th><th>STATUS</th><th>INTERPRETATION</th></tr></thead><tbody>
           <tr><td>TS-MACHINE-01 film and model</td><td><Status tone="concept">CONCEPT VISUALIZATION</Status></td><td>Design and systems communication.</td></tr>
-          <tr><td>SeerFlow commerce sequence</td><td><Status>RESEARCH DIRECTION</Status></td><td>Proposed architecture and behavior.</td></tr>
+          <tr><td>SeerFlow commerce sequence</td><td><Status tone="live">LIVE PRODUCT SITE</Status></td><td>Capability framing sourced to seerflow.in; cinematic values remain labeled demo telemetry.</td></tr>
           <tr><td>Asset manifest and integrity hashes</td><td><Status tone="live">LIVE</Status></td><td>Current public artifact provenance.</td></tr>
         </tbody></table>
       </section>

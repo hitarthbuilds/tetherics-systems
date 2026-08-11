@@ -236,6 +236,16 @@ export function CinematicRuntime({ children }: { children: React.ReactNode }) {
         event.preventDefault();
         setConsoleOpen((open) => !open);
       }
+      const target = event.target instanceof Element
+        ? event.target.closest("input, textarea, select, [contenteditable='true']")
+        : null;
+      if (!target && (event.key === "ArrowRight" || event.key === "ArrowLeft")) {
+        const direction = event.key === "ArrowRight" ? 1 : -1;
+        const nextIndex = Math.max(0, Math.min(SCENES.length - 1, currentScene + direction));
+        event.preventDefault();
+        document.querySelector<HTMLElement>(`[data-scene="${SCENES[nextIndex].id}"]`)
+          ?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
+      }
       if (event.key === "Escape") {
         setConsoleOpen(false);
         setRecordsOpen(null);

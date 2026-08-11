@@ -11,13 +11,13 @@ type InspectionRecord = {
   input: string;
   output: string;
   boundary: string;
-  status: "CONCEPT" | "RESEARCH DIRECTION" | "INTERFACE MODEL";
+  status: "CONCEPT" | "RESEARCH DIRECTION" | "INTERFACE MODEL" | "LIVE PRODUCT";
   href?: string;
   linkLabel?: string;
 };
 
 const records: Record<string, InspectionRecord> = {
-  seerflow: { code: "TS/SYS-001", title: "SeerFlow", layer: "COMMERCE CONTROL", role: "Models operational commerce state and coordinates policy-bounded responses.", input: "Orders, inventory, payments, settlements, shipments, alerts", output: "Proposed decisions, orchestrated tasks, auditable commands", boundary: "No public deployment, customer, benchmark, or production outcome is evidenced.", status: "RESEARCH DIRECTION", href: "/records/seerflow", linkLabel: "OPEN PUBLIC RECORD" },
+  seerflow: { code: "TS/SYS-001", title: "SeerFlow", layer: "INDIAN D2C COMMAND CENTRE", role: "Connects commerce, payment and logistics state to profit, cash-flow and RTO decision views.", input: "Shopify, Razorpay and Shiprocket records named by the public product site", output: "Cash-flow, RTO risk, reconciliation, unit economics and cited data views", boundary: "Capability descriptions are first-party product claims from seerflow.in; cinematic metrics are demo telemetry, not customer results.", status: "LIVE PRODUCT", href: "https://seerflow.in", linkLabel: "OPEN SEERFLOW.IN" },
   machine: { code: "TS/MACHINE-01", title: "Autonomous Machine", layer: "PHYSICAL SYSTEM", role: "Turns state and control commands into modeled physical actuation.", input: "Sensor field, state estimate, control target", output: "Actuator commands and observed feedback", boundary: "The 3D asset is a concept visualization, not evidence of a physical prototype.", status: "CONCEPT", href: "/evidence", linkLabel: "OPEN ASSET EVIDENCE" },
   perception: { code: "TS-SEN/P04", title: "Perception", layer: "SENSING", role: "Transforms raw sensor observations into a geometric state estimate.", input: "Optical, depth, position, timing signals", output: "Objects, geometry, confidence, trajectory", boundary: "Values shown in the experience are narrative interface telemetry.", status: "INTERFACE MODEL" },
   compute: { code: "TS-CMP/N08", title: "Compute", layer: "STATE + REASONING", role: "Hosts the modeled state, policies, inference and control planning layers.", input: "Events, sensor features, policies", output: "State updates and proposed control paths", boundary: "No hardware specification or measured throughput is claimed.", status: "CONCEPT" },
@@ -57,7 +57,11 @@ export function SystemInspector() {
         <div><dt>EVIDENCE BOUNDARY</dt><dd>{record.boundary}</dd></div>
       </dl>
       <div className="system-inspector__actions">
-        {record.href ? <Link href={record.href}>{record.linkLabel} ↗</Link> : <Link href="/methodology">READ CLAIMS METHOD ↗</Link>}
+        {record.href?.startsWith("http")
+          ? <a href={record.href} target="_blank" rel="noreferrer">{record.linkLabel} ↗</a>
+          : record.href
+            ? <Link href={record.href}>{record.linkLabel} ↗</Link>
+            : <Link href="/methodology">READ CLAIMS METHOD ↗</Link>}
         <span>SESSION PATH / RECORDED</span>
       </div>
     </aside>

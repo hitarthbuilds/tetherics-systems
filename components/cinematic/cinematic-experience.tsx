@@ -10,12 +10,31 @@ import { TopologyField } from "../topology-field";
 import { CommandConsole, RecordDrawer } from "./command-console";
 import { CinematicFilm } from "./cinematic-film";
 import { CinematicRuntime, SCENES, type SceneId, useCinematicRuntime, useSceneProgress } from "./runtime";
+import { SeerflowCommandCenter } from "./seerflow-command-center";
 import { SystemInspector } from "./system-inspector";
 
 const InteractiveSystemWorld = dynamic(() => import("./interactive-system-world").then((module) => module.InteractiveSystemWorld), {
   ssr: false,
   loading: () => <div className="interactive-system-world is-loading" aria-hidden="true" />,
 });
+
+function DeferredInteractiveSystemWorld() {
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    const activate = () => setEnabled(true);
+    const timer = window.setTimeout(activate, 1200);
+    window.addEventListener("scroll", activate, { once: true, passive: true });
+    window.addEventListener("pointerdown", activate, { once: true, passive: true });
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("scroll", activate);
+      window.removeEventListener("pointerdown", activate);
+    };
+  }, []);
+
+  return enabled ? <InteractiveSystemWorld /> : null;
+}
 
 function SceneLabel({ id }: { id: SceneId }) {
   const scene = SCENES.find((item) => item.id === id)!;
@@ -31,17 +50,22 @@ function BootGate() {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
+    let hideTimer: number | null = null;
     const ready = () => {
       setStatus("READY");
-      window.setTimeout(() => setVisible(false), 520);
+      if (hideTimer !== null) window.clearTimeout(hideTimer);
+      hideTimer = window.setTimeout(() => setVisible(false), 520);
     };
     window.addEventListener("tetherics:cinematic-ready", ready);
     window.addEventListener("tetherics:cinematic-unavailable", ready);
-    const fallback = window.setTimeout(ready, 2200);
+    window.addEventListener("tetherics:3d-ready", ready);
+    const fallback = window.setTimeout(ready, 3600);
     return () => {
       window.removeEventListener("tetherics:cinematic-ready", ready);
       window.removeEventListener("tetherics:cinematic-unavailable", ready);
+      window.removeEventListener("tetherics:3d-ready", ready);
       window.clearTimeout(fallback);
+      if (hideTimer !== null) window.clearTimeout(hideTimer);
     };
   }, []);
 
@@ -53,6 +77,31 @@ function BootGate() {
       <i aria-hidden="true" />
       <button type="button" onClick={() => setVisible(false)}>SKIP / ENTER</button>
     </div>
+  );
+}
+
+function WorldNavigator() {
+  const { activeIndex, jumpTo } = useCinematicRuntime();
+  const active = SCENES[activeIndex] ?? SCENES[0];
+  return (
+    <nav className="world-navigator" aria-label="Interactive world scenes">
+      <div><span>WORLD MAP</span><strong>{active.number} / {active.label}</strong></div>
+      <div className="world-navigator__nodes">
+        {SCENES.map((scene, index) => (
+          <button
+            key={scene.id}
+            type="button"
+            className={index === activeIndex ? "is-active" : undefined}
+            aria-label={`Go to scene ${scene.number}: ${scene.label}`}
+            aria-current={index === activeIndex ? "step" : undefined}
+            title={`${scene.number} / ${scene.label}`}
+            onClick={() => jumpTo(scene.id)}
+          >
+            <i /><span>{scene.number}</span>
+          </button>
+        ))}
+      </div>
+    </nav>
   );
 }
 
@@ -87,6 +136,7 @@ function SignalScene() {
         <SceneLabel id="signal" />
         <div className="cine-signal__origin"><i /><span>SIGNAL DETECTED</span></div>
         <div className="cine-signal__intro"><span>TETHERICS SYSTEMS</span><span>INDIA / 2026</span><span>INFRASTRUCTURE STATUS / INITIALIZING</span></div>
+        <div className="cine-signal__startup"><span>INTERACTIVE SYSTEM WORLD / ONLINE</span><strong>EVERYTHING<br />IS A SYSTEM.</strong><small>SCROLL TO MOVE · DRAG TO ORBIT · CLICK TO INSPECT</small></div>
         <h1><span>SOFTWARE</span><span>TRANSFORMED</span><span>INFORMATION.</span></h1>
         <p className="cine-scroll-cue">SCROLL / ADVANCE TIME ↓</p>
       </div>
@@ -138,22 +188,15 @@ function IntelligenceScene() {
   );
 }
 
-const commerceNodes = ["ORDERS", "INVENTORY", "PAYMENTS", "SETTLEMENTS", "SHIPMENTS", "FORECASTING", "ALERTS", "ACTIONS"];
-
 function SeerflowScene() {
   const progress = useSceneProgress("seerflow");
-  const { inspect } = useCinematicRuntime();
   const corrected = progress > 0.62;
   return (
     <Scene id="seerflow" className={`cine-seerflow${corrected ? " is-corrected" : ""}`}>
       <div className="cine-sticky">
         <SceneLabel id="seerflow" />
-        <div className="seerflow-title"><span>TS/SYS-001</span><h2>SEERFLOW</h2><p>Commerce infrastructure that observes, reasons and acts.</p></div>
-        <div className="commerce-system" role="button" tabIndex={0} onClick={() => inspect("seerflow")} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") inspect("seerflow"); }}>
-          <div className="commerce-system__axis" aria-hidden="true"><i /></div>
-          {commerceNodes.map((node, index) => <div className="commerce-node" key={node} style={{ "--node": index } as CSSProperties}><span>{String(index + 1).padStart(2, "0")}</span><strong>{node}</strong><i /></div>)}
-          <div className="commerce-system__forecast" aria-hidden="true"><i /><i /><i /></div>
-        </div>
+        <div className="seerflow-title"><span>TS/SYS-001 · LIVE PRODUCT</span><h2>SEERFLOW</h2><p>Business command centre for Indian D2C: profit, cash flow and return-to-origin intelligence.</p></div>
+        <SeerflowCommandCenter />
         <div className="seerflow-state">
           <span>INVENTORY STATE / {corrected ? "NOMINAL" : "DEVIATION"}</span>
           <span>FULFILLMENT RISK / {corrected ? "RESOLVED" : "ELEVATED"}</span>
@@ -342,6 +385,7 @@ function EverythingScene() {
           <button type="button" onClick={() => setConsoleOpen(true)}>OPEN SYSTEM INDEX ↗</button>
           <Link href="/evidence">EVIDENCE REGISTER ↗</Link>
           <Link href="/records/seerflow">SEERFLOW RECORD ↗</Link>
+          <a href="https://seerflow.in" target="_blank" rel="noreferrer">OPEN SEERFLOW.IN ↗</a>
           <Link href="/methodology">CLAIMS METHOD ↗</Link>
           <Link href="/security">SECURITY BOUNDARY ↗</Link>
           <a href="/briefs/tetherics-system-brief.pdf">SYSTEM BRIEF / PDF ↗</a>
@@ -359,7 +403,8 @@ function Experience() {
       <BootGate />
       <GlobalCursor />
       <PersistentInterface />
-      <InteractiveSystemWorld />
+      <WorldNavigator />
+      <DeferredInteractiveSystemWorld />
       <CinematicFilm />
       <CommandConsole />
       <RecordDrawer />

@@ -32,8 +32,8 @@ export default function EvidencePage() {
             <tr><td>EV-001</td><td>TS-MACHINE-01 scene archive</td><td><Status tone="concept">CONCEPT</Status></td><td>Native 3D geometry, articulated rig, PBR material graph and camera/light scene.</td><td><a href="/models/tetherics-machine.scn" download>DOWNLOAD .SCN ↗</a></td></tr>
             <tr><td>EV-002</td><td>4K cinematic master</td><td><Status tone="concept">CONCEPT</Status></td><td>3840×2160 offline Metal render, 96 frames at 24 fps.</td><td><a href="/cinematic/tetherics-machine-4k.mp4">OPEN FILM ↗</a></td></tr>
             <tr><td>EV-003</td><td>Asset manifest</td><td><Status tone="live">LIVE</Status></td><td>Resolution, renderer, modeling disclosure, byte size and SHA-256 provenance.</td><td><a href="/cinematic/asset-manifest.json">OPEN JSON ↗</a></td></tr>
-            <tr><td>EV-004</td><td>SeerFlow system record</td><td><Status>RESEARCH DIRECTION</Status></td><td>Problem framing and proposed architecture, with explicit evidence gaps.</td><td><Link href="/records/seerflow">READ RECORD ↗</Link></td></tr>
-            <tr><td>EV-005</td><td>Public system briefs</td><td><Status tone="live">LIVE</Status></td><td>Portable, dated summaries of the system thesis and SeerFlow evidence boundary.</td><td><a href="/briefs/tetherics-system-brief.pdf">SYSTEM PDF ↗</a><br /><a href="/briefs/seerflow-system-record.pdf">SEERFLOW PDF ↗</a></td></tr>
+            <tr><td>EV-004</td><td>SeerFlow product + system record</td><td><Status tone="live">LIVE PRODUCT SITE</Status></td><td>Public product positioning, named capability surface and the boundary between first-party claims and independent evidence.</td><td><Link href="/records/seerflow">READ RECORD ↗</Link><br /><a href="https://seerflow.in" target="_blank" rel="noreferrer">OPEN PRODUCT ↗</a></td></tr>
+            <tr><td>EV-005</td><td>Public system brief</td><td><Status tone="live">LIVE</Status></td><td>Portable, dated summary of the Tetherics system thesis and modeled physical-system boundary.</td><td><a href="/briefs/tetherics-system-brief.pdf">SYSTEM PDF ↗</a></td></tr>
           </tbody>
         </table>
       </section>
@@ -44,7 +44,7 @@ export default function EvidencePage() {
         <div className="trust-disclosures">
           <Disclosure label="Public brand" value="Tetherics Systems" status={<Status tone="live">DISCLOSED</Status>} />
           <Disclosure label="Public geography" value="India" status={<Status tone="live">DISCLOSED</Status>} />
-          <Disclosure label="Canonical website" value="tetherics.systems" status={<Status tone="live">DISCLOSED</Status>} />
+          <Disclosure label="Canonical website" value="tethericsystems.com" status={<Status tone="live">DISCLOSED</Status>} />
           <Disclosure label="Legal entity / registration" value="No registration evidence has been published on this site." status={<Status tone="limited">NOT DISCLOSED</Status>} />
           <Disclosure label="Leadership identities" value="No named leadership profile has been published on this site." status={<Status tone="limited">NOT DISCLOSED</Status>} />
           <Disclosure label="Customer deployments" value="No customer, deployment or outcome evidence is claimed publicly." status={<Status tone="limited">NO PUBLIC EVIDENCE</Status>} />

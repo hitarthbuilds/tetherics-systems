@@ -19,7 +19,7 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://tetherics.systems"),
+  metadataBase: new URL("https://tethericsystems.com"),
   title: "Tetherics Systems — Everything Is a System",
   description:
     "Tetherics Systems engineers the infrastructure between intelligence and the physical world.",
