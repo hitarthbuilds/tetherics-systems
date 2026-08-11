@@ -1,0 +1,31 @@
+{
+  "asset": "Tetherics Autonomous System / TS-MACHINE-01",
+  "status": "CONCEPT VISUALIZATION",
+  "sourceFormat": "Apple SceneKit scene archive",
+  "renderer": "Metal / SceneKit physically based offline renderer",
+  "masterResolution": "3840x2160",
+  "frames": 96,
+  "framesPerSecond": 24,
+  "durationSeconds": 4,
+  "modeling": [
+    "Chamfered parametric CAD geometry",
+    "Articulated shoulder, elbow, wrist and gripper rig",
+    "Physically based metal, ceramic, rubber, optical and emissive materials",
+    "Compute modules, perception stack, direct-drive actuator and service details"
+  ],
+  "claims": "No physical prototype, deployment, performance or certification claim is implied by this visualization.",
+  "deliveries": {
+    "tetherics-machine-4k.mp4": {
+      "bytes": 15013677,
+      "sha256": "a1950c2fa01deeba14c23393abb29d381af82fc8b6d9c3c692b78864fc6c591d"
+    },
+    "tetherics-machine-poster-4k.jpg": {
+      "bytes": 329777,
+      "sha256": "b2ac2ed8cac3ac4a9c7b9e05ec325b4bb28e723b02d46f24d4675cb1a2f55d5a"
+    },
+    "tetherics-machine.scn": {
+      "bytes": 64705,
+      "sha256": "e97124c8672226677898a52533ad5936cb6bae1e76f08dcd9b3612e11d4bd59e"
+    }
+  }
+}
