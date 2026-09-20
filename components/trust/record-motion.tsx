@@ -1,0 +1,6 @@
+"use client";
+import {useEffect} from "react";
+import gsap from "gsap";
+import {ScrollTrigger} from "gsap/ScrollTrigger";
+
+export function RecordMotion(){useEffect(()=>{const root=document.querySelector('.record-page');if(!root)return;gsap.registerPlugin(ScrollTrigger);const media=gsap.matchMedia();media.add('(prefers-reduced-motion: no-preference)',()=>{const context=gsap.context(()=>{gsap.from('.record-hero-visual',{y:22,opacity:0,duration:1,ease:'power3.out'});gsap.utils.toArray<HTMLElement>('[data-record-reveal]').forEach(element=>{gsap.from(element,{y:26,opacity:0,duration:.7,ease:'power2.out',scrollTrigger:{trigger:element,start:'top 93%',once:true}});});},root);return()=>context.revert();});const sections=root.querySelectorAll<HTMLElement>('.trust-section[id]');const observer=new IntersectionObserver(entries=>{for(const entry of entries){if(!entry.isIntersecting)continue;root.querySelectorAll('.record-index a').forEach(link=>{if(link.getAttribute('href')===`#${entry.target.id}`)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');});}},{rootMargin:'-15% 0px -60% 0px',threshold:0});sections.forEach(section=>observer.observe(section));return()=>{observer.disconnect();media.revert();};},[]);return null;}

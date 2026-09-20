@@ -1,58 +1,11 @@
-import type { Metadata } from "next";
-import { Disclosure, Status, TrustShell } from "@/components/trust/trust-shell";
-import { company, products } from "@/lib/product-family";
-
-export const metadata: Metadata = {
-  title: "SeerFlow — Live Product Record | Tetheric Systems",
-  description: "SeerFlow, a product of Tetheric Systems Private Limited: connected decision intelligence for Indian D2C.",
-};
-
-export default function SeerflowRecordPage() {
-  return (
-    <TrustShell code="TS/SYS-001 · LIVE PRODUCT RECORD" title="SeerFlow." summary="Connected decision intelligence for Indian D2C. A product of Tetheric Systems Private Limited, bringing orders, payouts, costs and returns into one operating picture.">
-      <section className="trust-section">
-        <span className="trust-kicker">PRODUCT IDENTITY / SEERFLOW</span>
-        <h2>A clearer operating picture.</h2>
-        <div className="trust-callout"><strong>SOURCE / OFFICIAL PRODUCT SITE</strong><p>SeerFlow brings the business context around orders, cash, settlement timing, contribution and returns into a decision layer. Its official website is the source for current availability and product details. The descriptions here are first-party product claims, not independently audited customer outcomes.</p></div>
-        <p><a href={products.seerflow.url} target="_blank" rel="noreferrer">OPEN OFFICIAL SEERFLOW WEBSITE ↗</a></p>
-        <div className="trust-disclosures">
-          <Disclosure label="System ID" value="TS/SYS-001" status={<Status tone="live">LINKED PRODUCT</Status>} />
-          <Disclosure label="Product website" value={products.seerflow.url} status={<Status tone="live">PUBLIC</Status>} />
-          <Disclosure label="Owned by" value={company.legalName} status={<Status tone="live">COMPANY</Status>} />
-          <Disclosure label="Public status" value="Live product; consult the official site for current access and available plans." status={<Status tone="live">FIRST-PARTY</Status>} />
-          <Disclosure label="Data boundary" value="Decision quality depends on connected records, provider coverage and supplied cost inputs." status={<Status>EXPLICIT INPUTS</Status>} />
-          <Disclosure label="Independent outcome review" value="This record does not attach an independently audited customer performance dataset." status={<Status tone="limited">NOT ASSERTED</Status>} />
-          <Disclosure label="Record updated" value="20 September 2026" status={<Status tone="live">DATED</Status>} />
-        </div>
-      </section>
-
-      <section className="trust-section">
-        <span className="trust-kicker">PUBLIC CAPABILITY SURFACE</span>
-        <h2>One operating picture for the D2C money layer.</h2>
-        <div className="trust-grid">
-          <article className="trust-card"><span>01 / CONTRIBUTION</span><h3>Understand the costs</h3><p>Bring product costs, fees, shipping, marketing and returned orders into the contribution picture. Missing inputs need to remain visible.</p></article>
-          <article className="trust-card"><span>02 / RETURNS</span><h3>See the return context</h3><p>Connect return and return-to-origin context with orders and financial exposure, subject to the available data.</p></article>
-          <article className="trust-card"><span>03 / CASH</span><h3>Follow cash movement</h3><p>Understand recorded and expected cash in the context of settlement timing and connected operating records.</p></article>
-          <article className="trust-card"><span>04 / SETTLEMENTS</span><h3>Keep the trail</h3><p>Connect payments and payouts back to their underlying records so reconciliation has a traceable source.</p></article>
-          <article className="trust-card"><span>05 / COPILOT</span><h3>Answers with sources</h3><p>Ask operational questions while retaining the data sources cited behind the response.</p></article>
-          <article className="trust-card"><span>06 / POSITION</span><h3>Keep the OMS</h3><p>SeerFlow&apos;s public positioning adds an intelligence and money layer instead of replacing core order operations.</p></article>
-        </div>
-      </section>
-
-      <section className="trust-section">
-        <span className="trust-kicker">CLAIMS BOUNDARY</span>
-        <h2>What this record does—and does not—establish.</h2>
-        <table className="trust-table">
-          <thead><tr><th>ITEM</th><th>PUBLIC SOURCE</th><th>RECORD STATUS</th></tr></thead>
-          <tbody>
-            <tr><td>Product identity</td><td>Official SeerFlow website linked above</td><td><Status tone="live">DIRECTLY INSPECTABLE</Status></td></tr>
-            <tr><td>Capability descriptions</td><td>Official product copy and interface examples</td><td><Status>FIRST-PARTY CLAIM</Status></td></tr>
-            <tr><td>Homepage operating view</td><td>Authored illustration of product context</td><td><Status tone="concept">ILLUSTRATION</Status></td></tr>
-            <tr><td>Customer outcomes</td><td>No independently reviewed dataset attached here</td><td><Status tone="limited">NOT ASSERTED</Status></td></tr>
-            <tr><td>Security and compliance</td><td>Refer to the official product&apos;s own disclosures</td><td><Status tone="limited">NOT RE-CERTIFIED HERE</Status></td></tr>
-          </tbody>
-        </table>
-      </section>
-    </TrustShell>
-  );
-}
+import type {Metadata} from "next";
+import {Disclosure,RecordLink,SectionHeading,Status,TrustShell} from "@/components/trust/trust-shell";
+import {company,products} from "@/lib/product-family";
+export const metadata:Metadata={title:"SeerFlow — Live Product Record | Tetheric Systems",description:"SeerFlow, a product of Tetheric Systems Private Limited: connected decision intelligence for Indian D2C."};
+const capabilities=[{id:'contribution',index:'01',title:'Contribution',question:'What sits beneath the sale?',description:'Bring product costs, fees, shipping, marketing and returned orders into the contribution picture. Missing inputs remain part of the context.',terms:['Product cost','Fees & shipping','Marketing','Returns']},{id:'returns',index:'02',title:'Returns',question:'What comes back with the order?',description:'Connect return and return-to-origin context with orders and financial exposure, subject to the available data.',terms:['Order reference','Return / RTO','Exposure']},{id:'cash',index:'03',title:'Cash movement',question:'Recorded today. Expected when?',description:'Understand recorded and expected cash alongside settlement timing and connected operating records.',terms:['Recorded cash','Expected cash','Timing']},{id:'settlements',index:'04',title:'Settlements',question:'Can you trace the payout?',description:'Connect payments and payouts back to their underlying records so reconciliation has a source you can follow.',terms:['Payment','Payout','Source trail']}];
+export default function SeerflowRecordPage(){return <TrustShell current="/records/seerflow" accent="green" code="TS/SYS-001 / LIVE PRODUCT RECORD" title={<>See the business.<br/><em>Behind the order.</em></>} summary="SeerFlow brings orders, payouts, costs and returns into one operating picture for Indian D2C. A product of Tetheric Systems Private Limited." chapters={[{id:'picture',label:'The operating picture'},{id:'decisions',label:'Four decision contexts'},{id:'bridge',label:'From context to creative'},{id:'record',label:'Identity & boundaries'}]} visual={<div className="seerflow-hero-art"><div className="sf-record-inputs">{['Orders','Payouts','Costs','Returns'].map((item,index)=><span key={item}><small>0{index+1}</small>{item}<i>↗</i></span>)}</div><div className="sf-record-core"><span>SEERFLOW</span><strong>The operating<br/><em>picture.</em></strong><div><i/>Records stay in context</div></div><div className="sf-record-output"><span>UNDERSTAND</span><b>Contribution / Cash / Returns</b></div><small className="diagram-caption">PRODUCT CONTEXT DIAGRAM · NO CUSTOMER DATA</small></div>}>
+ <section id="picture" className="trust-section"><SectionHeading number="01" label="THE INTELLIGENCE & MONEY LAYER" title={<>Keep the operations.<br/>Connect the picture.</>} description="SeerFlow’s public positioning adds a decision layer around the business. It does not replace the core order-management system."/><div className="sf-operating-map" data-record-reveal><div className="sf-operating-sources"><span>CONNECTED RECORDS</span>{['Order operations','Payment & payout records','Supplied cost inputs','Return context'].map(item=><div key={item}><i/> {item}</div>)}</div><div className="sf-operating-center"><span>SF</span><h3>One context.<br/>Traceable sources.</h3><p>Orders ↔ money ↔ operating events</p></div><div className="sf-operating-questions"><span>DECISION CONTEXT</span>{capabilities.map(item=><a key={item.id} href={`#${item.id}`}>{item.title}<b>↗</b></a>)}</div></div><div className="record-source-note"><span>OFFICIAL PRODUCT SOURCE</span><p>These descriptions reflect first-party product positioning. Consult the official site for current availability and product details; they are not independently audited customer outcomes.</p><RecordLink href={products.seerflow.url} external>Open SeerFlow</RecordLink></div></section>
+ <section id="decisions" className="trust-section"><SectionHeading number="02" label="THE QUESTIONS THAT MATTER" title="From scattered records to context."/><div className="sf-decision-list">{capabilities.map(item=><article id={item.id} key={item.id} data-record-reveal><div><span>{item.index} / {item.title.toUpperCase()}</span><h3>{item.question}</h3></div><div><p>{item.description}</p><div>{item.terms.map(term=><span key={term}>{term}</span>)}</div></div></article>)}</div><div className="sf-copilot"><div><span>THE COPILOT</span><h3>A useful answer<br/><em>keeps its sources.</em></h3></div><div><p>Ask operational questions while retaining the data sources cited behind a response. Decision quality depends on connected records, provider coverage and supplied cost inputs.</p><span>Missing input ≠ zero</span><span>Capability ≠ audited outcome</span></div></div></section>
+ <section id="bridge" className="trust-section"><SectionHeading number="03" label="A BRIDGE TO FOUNDRY" title="Let the creative know the context."/><div className="record-bridge"><div><span>SEERFLOW</span><strong>Recorded<br/>business context</strong></div><i>⇄</i><div><span>APEX FOUNDRY</span><strong>Research &<br/>creative direction</strong></div><p><Status>PILOT IMPLEMENTATION</Status>A brand-specific grant and manual snapshot bridge have been implemented for the private pilot. The source-side deployment, configured trust and live data transfer remain separate steps; this record does not claim that brands are connected by default.</p></div><RecordLink href="/records/foundry#bridge">Inspect the bridge boundary</RecordLink></section>
+ <section id="record" className="trust-section"><SectionHeading number="04" label="IDENTITY & CLAIMS BOUNDARY" title="The product, in the public record."/><div className="trust-disclosures"><Disclosure label="Product / system ID" value="SeerFlow · TS/SYS-001" status={<Status tone="live">LIVE PRODUCT</Status>}/><Disclosure label="Owned by" value={company.legalName} status={<Status tone="live">DISCLOSED</Status>}/><Disclosure label="Official product website" value={products.seerflow.url} status={<Status tone="live">PUBLIC</Status>}/><Disclosure label="Availability" value="Consult the official site for current access and available plans." status={<Status>FIRST-PARTY</Status>}/><Disclosure label="Independent outcome review" value="No independently audited customer performance dataset is attached to this record." status={<Status tone="limited">NOT ASSERTED</Status>}/><Disclosure label="Security and compliance" value="Refer to the product’s own disclosures. They are not re-certified here." status={<Status tone="limited">PRODUCT-SPECIFIC</Status>}/><Disclosure label="Illustrated interfaces" value="Authored product context; no live account or customer performance shown." status={<Status tone="concept">ILLUSTRATION</Status>}/><Disclosure label="Record updated" value="20 September 2026" status={<Status>DATED</Status>}/></div></section>
+ </TrustShell>;}

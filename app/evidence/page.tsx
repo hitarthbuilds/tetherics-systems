@@ -1,60 +1,20 @@
-import type { Metadata } from "next";
+import type {Metadata} from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { Disclosure, Status, TrustShell } from "@/components/trust/trust-shell";
-import { company, products } from "@/lib/product-family";
-
-export const metadata: Metadata = {
-  title: "Evidence Register — Tetheric Systems",
-  description: "Public product records, provenance and capability boundaries for Tetheric Systems Private Limited.",
-};
-
-export default function EvidencePage() {
-  return (
-    <TrustShell code="COMPANY / PUBLIC RECORDS" title="The work, in context." summary="Meet our products, inspect the source material, and understand the status of each piece of work.">
-      <section className="trust-section">
-        <span className="trust-kicker">STATUS TAXONOMY / V1.0</span>
-        <h2>Every claim gets a state.</h2>
-        <div className="trust-grid">
-          <article className="trust-card"><Status tone="live">LIVE</Status><h3>Publicly operating</h3><p>A working artifact or process that can be inspected at the linked source.</p></article>
-          <article className="trust-card"><Status>PILOT</Status><h3>Bounded evaluation</h3><p>Running in a constrained setting. Scope and evidence must be named.</p></article>
-          <article className="trust-card"><Status>PROTOTYPE</Status><h3>Functional build</h3><p>A testable implementation without a production or deployment claim.</p></article>
-          <article className="trust-card"><Status>SIMULATION</Status><h3>Modeled behavior</h3><p>Outputs from a declared simulation, not real-world performance.</p></article>
-          <article className="trust-card"><Status tone="concept">CONCEPT VISUALIZATION</Status><h3>Design communication</h3><p>Visual intent only. It does not establish a physical prototype or capability.</p></article>
-          <article className="trust-card"><Status tone="limited">NOT DISCLOSED</Status><h3>No public evidence</h3><p>The site does not substitute implication or marketing copy for missing facts.</p></article>
-        </div>
-      </section>
-
-      <section className="trust-section">
-        <span className="trust-kicker">PUBLIC ARTIFACTS</span>
-        <h2>Inspectable records.</h2>
-        <table className="trust-table">
-          <thead><tr><th>ID</th><th>ARTIFACT</th><th>STATE</th><th>WHAT IT EVIDENCES</th><th>ACCESS</th></tr></thead>
-          <tbody>
-            <tr><td>EV-001</td><td>TS-MACHINE-01 scene archive</td><td><Status tone="concept">CONCEPT</Status></td><td>Native 3D geometry, articulated rig, PBR material graph and camera/light scene.</td><td><a href="/models/tetherics-machine.scn" download>DOWNLOAD .SCN ↗</a></td></tr>
-            <tr><td>EV-002</td><td>4K cinematic master</td><td><Status tone="concept">CONCEPT</Status></td><td>3840×2160 offline Metal render, 96 frames at 24 fps.</td><td><a href="/cinematic/tetherics-machine-4k.mp4">OPEN FILM ↗</a></td></tr>
-            <tr><td>EV-003</td><td>Asset manifest</td><td><Status tone="live">LIVE</Status></td><td>Resolution, renderer, modeling disclosure, byte size and SHA-256 provenance.</td><td><a href="/cinematic/asset-manifest.json">OPEN JSON ↗</a></td></tr>
-            <tr><td>EV-004</td><td>SeerFlow product record</td><td><Status tone="live">LIVE PRODUCT</Status></td><td>Official product positioning and the distinction between a capability description and independently measured outcomes.</td><td><Link href="/records/seerflow">READ RECORD ↗</Link><br /><a href={products.seerflow.url} target="_blank" rel="noreferrer">OPEN PRODUCT ↗</a></td></tr>
-            <tr><td>EV-005</td><td>Archived system brief</td><td><Status tone="concept">CONCEPT ARCHIVE</Status></td><td>Portable, dated summary of the earlier system thesis and modeled physical-system boundary.</td><td><a href="/briefs/tetherics-system-brief.pdf">SYSTEM PDF ↗</a></td></tr>
-            <tr><td>EV-006</td><td>Apex Foundry pilot record</td><td><Status>PRIVATE PILOT</Status></td><td>Current creative-workspace scope, human review, connection boundaries and the public information site.</td><td><Link href="/records/foundry">READ RECORD ↗</Link><br /><a href={products.foundry.url} target="_blank" rel="noreferrer">OPEN PRODUCT INFO ↗</a></td></tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section className="trust-section">
-        <span className="trust-kicker">ORGANIZATION DISCLOSURE</span>
-        <h2>Known, unknown, and not implied.</h2>
-        <div className="trust-disclosures">
-          <Disclosure label="Company" value={company.legalName} status={<Status tone="live">DISCLOSED</Status>} />
-          <Disclosure label="Products" value="SeerFlow and Apex Foundry are products of Tetheric Systems Private Limited." status={<Status tone="live">OWNERSHIP</Status>} />
-          <Disclosure label="Public geography" value="India" status={<Status tone="live">DISCLOSED</Status>} />
-          <Disclosure label="Canonical website" value="tethericsystems.com" status={<Status tone="live">DISCLOSED</Status>} />
-          <Disclosure label="Registration documents" value="Registration documents are not published on this site." status={<Status tone="limited">NOT PUBLISHED HERE</Status>} />
-          <Disclosure label="General contact" value={company.email} status={<Status>CONTACT</Status>} />
-          <Disclosure label="Leadership identities" value="No named leadership profile has been published on this site." status={<Status tone="limited">NOT DISCLOSED</Status>} />
-          <Disclosure label="Customer outcomes" value="This company site does not assert independently verified customer performance or financial results." status={<Status tone="limited">NOT ASSERTED HERE</Status>} />
-          <Disclosure label="Product illustrations" value="The homepage shows authored interface concepts without customer data or measured performance results." status={<Status tone="concept">ILLUSTRATION</Status>} />
-        </div>
-      </section>
-    </TrustShell>
-  );
-}
+import {Disclosure,RecordLink,SectionHeading,Status,TrustShell} from "@/components/trust/trust-shell";
+import {company,products} from "@/lib/product-family";
+export const metadata:Metadata={title:"Evidence Register — Tetheric Systems",description:"Public product records, provenance and capability boundaries for Tetheric Systems Private Limited."};
+const artifacts=[
+ {id:'EV-001',name:'TS-MACHINE-01 scene archive',kind:'SCENE / .SCN',state:'CONCEPT',tone:'concept' as const,description:'Native 3D geometry, articulated rig, PBR material graph and camera/light scene.',boundary:'A designed scene. It does not establish a physical prototype or industrial performance.',url:'/models/tetherics-machine.scn',action:'Download the scene'},
+ {id:'EV-002',name:'4K cinematic master',kind:'FILM / MP4',state:'CONCEPT',tone:'concept' as const,description:'3840 × 2160 offline Metal render. 96 frames at 24 fps.',boundary:'A concept film. Any sensor or recovery values are fictional narrative telemetry.',url:'/cinematic/tetherics-machine-4k.mp4',action:'Watch the film'},
+ {id:'EV-003',name:'Asset manifest',kind:'PROVENANCE / JSON',state:'LIVE ARTIFACT',tone:'live' as const,description:'Resolution, renderer, modeling disclosure, byte size and SHA-256 provenance.',boundary:'The manifest records artifact properties. It does not validate the performance of a physical system.',url:'/cinematic/asset-manifest.json',action:'Inspect the manifest'},
+ {id:'EV-004',name:'SeerFlow product record',kind:'PRODUCT / RECORD',state:'LIVE PRODUCT',tone:'live' as const,description:'Official product positioning and the distinction between a capability description and independently measured outcomes.',boundary:'First-party capability descriptions. No independently audited customer results are attached.',url:'/records/seerflow',action:'Read the product record',external:products.seerflow.url},
+ {id:'EV-005',name:'Archived system brief',kind:'ARCHIVE / PDF',state:'CONCEPT ARCHIVE',tone:'concept' as const,description:'A portable, dated summary of the earlier system thesis and modeled physical-system boundary.',boundary:'Historical concept work, retained with its original scope.',url:'/briefs/tetherics-system-brief.pdf',action:'Open the system brief'},
+ {id:'EV-006',name:'Apex Foundry pilot record',kind:'PRODUCT / RECORD',state:'PRIVATE PILOT',tone:'neutral' as const,description:'The creative workspace, human review, Build Studio and the implemented SeerFlow bridge, with their availability boundaries.',boundary:'Public information is separate from pilot workspace access. A built integration is not a live data transfer.',url:'/records/foundry',action:'Read the pilot record',external:products.foundry.url},
+];
+export default function EvidencePage(){return <TrustShell current="/evidence" code="COMPANY / THE EVIDENCE REGISTER" title={<>Nothing without<br/>a <em>trail.</em></>} summary="A place to inspect the work. Follow the source, understand its state, and see exactly what each artifact establishes." accent="coral" chapters={[{id:'products',label:'Product records'},{id:'ledger',label:'Evidence ledger'},{id:'states',label:'Read the states'},{id:'company',label:'Company disclosure'}]} visual={<div className="evidence-hero-art"><Image src="/cinematic/tetherics-machine-poster-4k.jpg" fill sizes="(max-width: 760px) 100vw, 50vw" alt="The archived Tetherics concept machine, rendered as a cinematic scene" priority/><div><span>ARCHIVE / TS-MACHINE-01</span><strong>A scene you<br/>can inspect.</strong><Status tone="concept">CONCEPT VISUALIZATION</Status></div><a href="/cinematic/tetherics-machine-4k.mp4" aria-label="Watch the archived concept film">↗</a></div>}>
+ <section id="products" className="trust-section"><SectionHeading number="01" label="THE WORK TODAY" title={<>Two products.<br/>Different states.</>}/><div className="record-product-pair"><Link href="/records/seerflow" className="record-product-link seerflow-product" data-record-reveal><div className="evidence-product-glyph"><span>Orders</span><span>Costs</span><span>Cash</span><i>SF</i></div><Status tone="live">LIVE PRODUCT</Status><h3>SeerFlow <b>↗</b></h3><p>Connected decision intelligence for Indian D2C. Read the capability record and its source boundaries.</p></Link><Link href="/records/foundry" className="record-product-link foundry-product" data-record-reveal><div className="evidence-product-glyph"><span>Brand</span><span>Creative</span><span>Code</span><i>AF</i></div><Status>PRIVATE PILOT</Status><h3>Apex Foundry <b>↗</b></h3><p>Brand research, creative work and buildable ideas. Explore what is implemented in the pilot.</p></Link></div></section>
+ <section id="ledger" className="trust-section"><SectionHeading number="02" label="INSPECTABLE ARTIFACTS" title="Open the evidence." description="Each record carries a source and a boundary. Expand an entry to see what the artifact proves—and where that proof stops."/><div className="evidence-ledger">{artifacts.map(item=><details key={item.id} data-record-reveal><summary><span>{item.id}</span><div><small>{item.kind}</small><h3>{item.name}</h3></div><Status tone={item.tone}>{item.state}</Status><b>+</b></summary><div className="evidence-entry"><p>{item.description}</p><div><span>THE BOUNDARY</span><p>{item.boundary}</p></div><RecordLink href={item.url} download={item.id==='EV-001'||undefined}>{item.action}</RecordLink>{item.external&&<RecordLink href={item.external} external>Official product information</RecordLink>}</div></details>)}</div></section>
+ <section id="states" className="trust-section"><SectionHeading number="03" label="A SHARED VOCABULARY" title="A state is part of the claim."/><div className="evidence-states">{[{name:'Live',detail:'A working artifact or process you can inspect at its linked source.',mark:'↗'},{name:'Pilot',detail:'Running in a constrained setting, with a named scope and evidence.',mark:'◉'},{name:'Prototype',detail:'A testable implementation. No production or deployment claim.',mark:'⌘'},{name:'Simulation',detail:'Modeled outputs, explicitly distinct from real-world performance.',mark:'≈'},{name:'Concept',detail:'Visual intent. It does not establish a physical system or capability.',mark:'✳'},{name:'Not disclosed',detail:'No public evidence. Missing facts stay visible as missing.',mark:'—'}].map(item=><article key={item.name}><span>{item.mark}</span><div><h3>{item.name}</h3><p>{item.detail}</p></div></article>)}</div></section>
+ <section id="company" className="trust-section"><SectionHeading number="04" label="ORGANIZATION DISCLOSURE" title="Known. Unknown. Not implied."/><div className="record-company-stamp"><span>T</span><div><small>THE LEGAL ENTITY</small><h3>{company.legalName}</h3><p>India · tethericsystems.com</p></div></div><div className="trust-disclosures"><Disclosure label="Product ownership" value="SeerFlow and Apex Foundry are products of Tetheric Systems Private Limited." status={<Status tone="live">DISCLOSED</Status>}/><Disclosure label="Registration documents" value="Registration documents are not published on this site." status={<Status tone="limited">NOT PUBLISHED HERE</Status>}/><Disclosure label="Leadership identities" value="No named leadership profile has been published on this site." status={<Status tone="limited">NOT DISCLOSED</Status>}/><Disclosure label="Customer outcomes" value="This company site does not assert independently verified customer performance or financial results." status={<Status tone="limited">NOT ASSERTED HERE</Status>}/><Disclosure label="Product illustrations" value="Authored interface concepts contain no customer data or measured performance results." status={<Status tone="concept">ILLUSTRATION</Status>}/><Disclosure label="General contact" value={company.email} status={<Status>CONTACT</Status>}/></div></section>
+ </TrustShell>;}
