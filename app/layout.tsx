@@ -23,6 +23,11 @@ export const metadata: Metadata = {
   title: "Tetherics Systems — Everything Is a System",
   description:
     "Tetherics Systems engineers the infrastructure between intelligence and the physical world.",
+  verification: {
+    other: {
+      "facebook-domain-verification": "7usm7e0nmxph3drs20a4dzj8fciflf",
+    },
+  },
   openGraph: {
     title: "Tetherics Systems",
     description: "Everything is a system.",
