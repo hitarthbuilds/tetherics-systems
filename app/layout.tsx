@@ -3,6 +3,7 @@ import { Archivo, IBM_Plex_Mono } from "next/font/google";
 import "./base.css";
 import "./records.css";
 import "./family.css";
+import "./midnight.css";
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -38,8 +39,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#f8f8f5",
-  colorScheme: "light",
+  themeColor: "#100e18",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
