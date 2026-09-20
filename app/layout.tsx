@@ -1,9 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, IBM_Plex_Mono } from "next/font/google";
-import "./globals.css";
-import "./responsive.css";
-import "./cinematic.css";
-import "./trust.css";
+import "./base.css";
+import "./records.css";
+import "./family.css";
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -20,17 +19,17 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://tethericsystems.com"),
-  title: "Tetherics Systems — Everything Is a System",
+  title: "Tetheric Systems — The company behind SeerFlow & Apex Foundry",
   description:
-    "Tetherics Systems engineers the infrastructure between intelligence and the physical world.",
+    "Tetheric Systems Private Limited builds SeerFlow for D2C decision intelligence and Apex Foundry for brand research and creative work.",
   verification: {
     other: {
       "facebook-domain-verification": "7usm7e0nmxph3drs20a4dzj8fciflf",
     },
   },
   openGraph: {
-    title: "Tetherics Systems",
-    description: "Everything is a system.",
+    title: "Tetheric Systems — Clarity inside. Possibility outside.",
+    description: "The company behind SeerFlow and Apex Foundry. Two focused products. One belief in better ways of working.",
     type: "website",
   },
   twitter: { card: "summary_large_image" },
@@ -39,8 +38,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#080808",
-  colorScheme: "dark",
+  themeColor: "#f8f8f5",
+  colorScheme: "light",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

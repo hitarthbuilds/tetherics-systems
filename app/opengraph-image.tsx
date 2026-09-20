@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Tetherics Systems — Everything Is a System";
+export const alt = "Tetheric Systems — The company behind SeerFlow and Apex Foundry";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -13,22 +13,22 @@ export default function OpenGraphImage() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        background: "#080808",
-        color: "#e8e5de",
+        background: "#f8f8f5",
+        color: "#29252e",
         padding: "52px 58px",
         fontFamily: "sans-serif",
       }}
     >
       <div style={{ display: "flex", justifyContent: "space-between", fontSize: 20 }}>
-        <span>TETHERICS SYSTEMS</span>
-        <span style={{ color: "#ef3d29" }}>NODE / IND-WEST-01</span>
+        <span>TETHERIC SYSTEMS</span>
+        <span style={{ color: "#8966b4" }}>THE PRODUCT FAMILY</span>
       </div>
-      <div style={{ display: "flex", flexDirection: "column", fontSize: 120, fontWeight: 800, lineHeight: 0.78, letterSpacing: "-7px" }}>
-        <span>EVERYTHING</span>
-        <span>IS A SYSTEM.</span>
+      <div style={{ display: "flex", flexDirection: "column", fontSize: 98, fontWeight: 500, lineHeight: 1.02, letterSpacing: "-5px" }}>
+        <span>Clarity inside.</span>
+        <span style={{ color: "#8966b4" }}>Possibility outside.</span>
       </div>
       <div style={{ fontSize: 20, letterSpacing: "2px" }}>
-        INTELLIGENCE ↔ PHYSICAL WORLD
+        SEERFLOW / APEX FOUNDRY
       </div>
     </div>,
     size,

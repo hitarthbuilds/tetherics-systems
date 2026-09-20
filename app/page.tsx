@@ -1,5 +1,5 @@
-import { TethericsCinematicExperience } from "@/components/cinematic/cinematic-experience";
+import { ProductFamily } from "@/components/family/product-family";
 
 export default function Home() {
-  return <TethericsCinematicExperience />;
+  return <ProductFamily />;
 }

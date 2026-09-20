@@ -1,9 +1,11 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { company } from "@/lib/product-family";
 
 const navigation = [
   ["EVIDENCE", "/evidence"],
   ["SEERFLOW", "/records/seerflow"],
+  ["FOUNDRY", "/records/foundry"],
   ["METHODOLOGY", "/methodology"],
   ["SECURITY", "/security"],
 ] as const;
@@ -12,7 +14,7 @@ export function TrustShell({ code, title, summary, children }: { code: string; t
   return (
     <main className="trust-document">
       <header className="trust-header">
-        <Link href="/" className="trust-mark"><span>TS</span><strong>TETHERICS SYSTEMS</strong></Link>
+        <Link href="/" className="trust-mark"><span>T</span><strong>tetheric systems</strong></Link>
         <nav aria-label="Trust center">
           {navigation.map(([label, href]) => <Link key={href} href={href}>{label}</Link>)}
         </nav>
@@ -26,9 +28,9 @@ export function TrustShell({ code, title, summary, children }: { code: string; t
       </section>
       <div className="trust-body">{children}</div>
       <footer className="trust-footer">
-        <span>TETHERICS SYSTEMS / INDIA / 2026</span>
+        <span>{company.legalName}<br />The company behind SeerFlow and Apex Foundry.</span>
         <span>FACTS, STATUS AND LIMITATIONS ARE LABELED SEPARATELY.</span>
-        <Link href="/">RETURN TO EXPERIENCE ↗</Link>
+        <Link href="/">EXPLORE OUR PRODUCTS ↗</Link>
       </footer>
     </main>
   );
