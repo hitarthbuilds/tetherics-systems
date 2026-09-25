@@ -222,6 +222,9 @@ html.menu-open{overflow:hidden}
 .post-card:hover{transform:translateY(-8px);border-color:#bcd6f2;box-shadow:var(--shadow-lift)}
 .post-cover{position:relative;overflow:hidden;aspect-ratio:16/10;background:var(--navy-900)}
 .post-cover svg{display:block;width:100%;height:100%;transition:transform 1.2s var(--ease)}
+.post-cover--photo img{object-fit:cover;transition:transform 1.2s var(--ease)}
+.post-card:hover .post-cover--photo img{transform:scale(1.06)}
+.post-cover__tint{position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(6,13,22,.35)),linear-gradient(120deg,rgba(11,95,180,.18),transparent 55%);pointer-events:none}
 .post-card:hover .post-cover svg{transform:scale(1.08) rotate(-1deg)}
 .cover-bar{transition:transform .9s var(--ease)}
 .post-card:hover .cover-bar:first-child{transform:translateX(-24px)}

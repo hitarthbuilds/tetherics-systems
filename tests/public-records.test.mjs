@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import ts from 'typescript';
+process.env.VERCEL='1';delete process.env.BLOB_READ_WRITE_TOKEN;delete process.env.ADMIN_PASSWORD;
 import React from 'react';
 import {renderToStaticMarkup} from 'react-dom/server';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');const modules=new Map();
@@ -11,8 +12,10 @@ const dataUrl=source=>`data:text/javascript;base64,${Buffer.from(source).toStrin
 const reactUrl=JSON.stringify(import.meta.resolve('react'));
 const linkStub=dataUrl(`import React from ${reactUrl};export default function Link(props){return React.createElement('a',props,props.children);}`);
 const imageStub=dataUrl(`import React from ${reactUrl};export default function Image({fill,priority,...props}){return React.createElement('img',props);}`);
-const navigationStub=dataUrl(`export const usePathname=()=>'/';export function notFound(){throw new Error('NEXT_NOT_FOUND');}`);
-function loadUrl(file){if(modules.has(file))return modules.get(file);const compiled=ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.ES2022,jsx:ts.JsxEmit.ReactJSX,target:ts.ScriptTarget.ES2022}}).outputText;const resolved=compiled.replace(/import "[^"]+\.css";/g,'').replace(/^(\s*(?:import|export)\b[^\n]*?\bfrom )"([^"]+)"/gm,(_,head,name)=>{let target;if(name==='next/link')target=linkStub;else if(name==='next/image')target=imageStub;else if(name==='next/navigation')target=navigationStub;else if(name==='./record-motion')target=dataUrl('export const RecordMotion=()=>null;');else if(name.startsWith('@/')||name.startsWith('.')){const base=name.startsWith('@/')?path.join(root,name.slice(2)):path.resolve(path.dirname(file),name);target=loadUrl([`${base}.tsx`,`${base}.ts`].find(candidate=>fs.existsSync(candidate)));}else target=import.meta.resolve(name);return `${head}${JSON.stringify(target)}`;});const url=dataUrl(resolved);modules.set(file,url);return url;}
+const navigationStub=dataUrl(`export const usePathname=()=>'/';export function notFound(){throw new Error('NEXT_NOT_FOUND');}export function redirect(to){throw new Error('NEXT_REDIRECT '+to);}`);
+const cacheStub=dataUrl(`export const unstable_cache=(fn)=>fn;export const updateTag=()=>{};export const revalidateTag=()=>{};export const revalidatePath=()=>{};`);
+const headersStub=dataUrl(`export async function cookies(){return {get:()=>undefined,set:()=>{},delete:()=>{}};}`);
+function loadUrl(file){if(modules.has(file))return modules.get(file);const compiled=ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.ES2022,jsx:ts.JsxEmit.ReactJSX,target:ts.ScriptTarget.ES2022}}).outputText;const resolved=compiled.replace(/import "[^"]+\.css";/g,'').replace(/^(\s*(?:import|export)\b[^\n]*?\bfrom )"([^"]+)"/gm,(_,head,name)=>{let target;if(name==='next/link')target=linkStub;else if(name==='next/image')target=imageStub;else if(name==='next/navigation')target=navigationStub;else if(name==='next/cache')target=cacheStub;else if(name==='next/headers')target=headersStub;else if(name==='./record-motion')target=dataUrl('export const RecordMotion=()=>null;');else if(name.startsWith('@/')||name.startsWith('.')){const base=name.startsWith('@/')?path.join(root,name.slice(2)):path.resolve(path.dirname(file),name);target=loadUrl([`${base}.tsx`,`${base}.ts`].find(candidate=>fs.existsSync(candidate)));}else target=import.meta.resolve(name);return `${head}${JSON.stringify(target)}`;});const url=dataUrl(resolved);modules.set(file,url);return url;}
 const pages={};for(const route of ['/methodology','/security','/records/seerflow','/records/auctra']){const loadedPage=await import(loadUrl(path.join(root,'app',route,'page.tsx')));pages[route]=renderToStaticMarkup(React.createElement(loadedPage.default));}
 
 test('every page has one primary heading, current navigation and valid local section links',()=>{for(const [route,html] of Object.entries(pages)){assert.equal((html.match(/<h1[ >]/g)||[]).length,1,route);assert.match(html,new RegExp(`href="${route}" aria-current="page"`));const ids=new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(match=>match[1]));for(const match of html.matchAll(/href="#([^"]+)"/g))assert.ok(ids.has(match[1]),`${route}: missing ${match[1]}`);}});
@@ -28,7 +31,7 @@ test('Auctra includes implemented build and bridge capabilities with live readin
 test('SeerFlow preserves source and outcome limitations while linking the bridge record',()=>{const html=pages['/records/seerflow'];assert.match(html,/https:\/\/seerflow.tethericsystems.com/);assert.match(html,/No independently audited customer performance dataset/);assert.match(html,/Missing input ≠ zero/);assert.match(html,/does not claim that brands are connected by default/);assert.match(html,/PRODUCT CONTEXT DIAGRAM · NO CUSTOMER DATA/);});
 
 const {posts}=await import(loadUrl(path.join(root,'lib','blog.ts')));
-const companyPages={};for(const route of ['/about','/philosophy','/blog']){const loadedPage=await import(loadUrl(path.join(root,'app',route,'page.tsx')));companyPages[route]=renderToStaticMarkup(React.createElement(loadedPage.default));}
+const companyPages={};for(const route of ['/about','/philosophy','/blog']){const loadedPage=await import(loadUrl(path.join(root,'app',route,'page.tsx')));companyPages[route]=renderToStaticMarkup(await loadedPage.default({}));}
 const article=await import(loadUrl(path.join(root,'app','blog','[slug]','page.tsx')));
 for(const post of posts)companyPages[`/blog/${post.slug}`]=renderToStaticMarkup(await article.default({params:Promise.resolve({slug:post.slug})}));
 const resolves=pathname=>pathname==='/'||fs.existsSync(path.join(root,'app',pathname,'page.tsx'))||fs.existsSync(path.join(root,'public',pathname))||(pathname.startsWith('/blog/')&&posts.some(post=>`/blog/${post.slug}`===pathname));
@@ -38,3 +41,29 @@ test('the evidence register is retired and redirected to the company page',()=>{
 test('company pages and every article render one heading with resolvable internal links',()=>{assert.ok(posts.length>=5);for(const [route,html] of Object.entries(companyPages)){assert.equal((html.match(/<h1[ >]/g)||[]).length,1,route);for(const [,href] of html.matchAll(/href="(\/[^"]*)"/g))assert.ok(resolves(href.split(/[?#]/)[0]),`${route}: ${href}`);}});
 
 test('the about page states company facts without inventing people, dates or customers',()=>{const html=companyPages['/about'];assert.match(html,/Tetheric Systems Private Limited/);assert.match(html,/Live product: SeerFlow/);assert.match(html,/Private pilot: Auctra/);assert.match(html,/Live data transfer remains a separate step/);assert.doesNotMatch(html,/founded in|customers trust|SOC 2 certified/i);});
+
+const content=await import(loadUrl(path.join(root,'lib','cms','content.ts')));
+const auth=await import(loadUrl(path.join(root,'lib','cms','auth.ts')));
+const draft=(overrides={})=>({title:'A studio story',slug:'',dek:'Short dek',category:'Company',date:'2026-09-25',author:'',cover:'bars',featured:false,body:[{type:'p',text:'Hello world.'}],...overrides});
+
+test('studio content: slugs, pasted markdown and validation',()=>{
+  assert.equal(content.slugify('Clarity inside — Possibility outside!'),'clarity-inside-possibility-outside');
+  assert.deepEqual(content.textToBlocks('## Heading\n\n> A quote\n\n- one\n- two\n\nPlain text\nwraps.').map(block=>block.type),['h2','quote','list','p']);
+  const post=content.normalizeInput(draft(),new Set());
+  assert.equal(post.slug,'a-studio-story');assert.equal(post.author,'Tetheric Systems');
+  assert.throws(()=>content.normalizeInput(draft({title:''}),new Set()),/title/);
+  assert.throws(()=>content.normalizeInput(draft(),new Set(['a-studio-story'])),/already uses/);
+  assert.throws(()=>content.normalizeInput(draft({body:[]}),new Set()),/paragraph/);
+  const images=content.normalizeInput(draft({body:[{type:'p',text:'x'},{type:'image',url:'https://evil.example.com/a.png',alt:''},{type:'image',url:'https://abc.public.blob.vercel-storage.com/journal/a.png',alt:'ok',width:1200,height:800}]}),new Set());
+  assert.equal(images.body.filter(block=>block.type==='image').length,1,'only Blob or local studio images are accepted');
+});
+
+test('studio auth stays locked without a password outside local development',async()=>{
+  assert.equal(auth.devUnlocked(),false);
+  assert.equal(auth.adminConfigured(),false);
+  assert.equal(await auth.isAdmin(),false);
+  assert.equal(auth.passwordMatches('anything'),false);
+  process.env.ADMIN_PASSWORD='correct horse battery staple';
+  try{assert.equal(auth.passwordMatches('correct horse battery staple'),true);assert.equal(auth.passwordMatches('wrong'),false);}
+  finally{delete process.env.ADMIN_PASSWORD;}
+});

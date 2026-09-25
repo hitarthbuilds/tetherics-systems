@@ -1,9 +1,11 @@
 import type { MetadataRoute } from "next";
-import { posts } from "@/lib/blog";
+import { getAllPosts } from "@/lib/posts";
 
 const site = "https://tethericsystems.com";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const revalidate = 3600;
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const pages: MetadataRoute.Sitemap = [
     { url: site, changeFrequency: "monthly", priority: 1 },
     { url: `${site}/about`, changeFrequency: "monthly", priority: 0.9 },
@@ -14,5 +16,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${site}/methodology`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${site}/security`, changeFrequency: "monthly", priority: 0.7 },
   ];
-  return [...pages, ...posts.map((post) => ({ url: `${site}/blog/${post.slug}`, lastModified: post.date, changeFrequency: "yearly" as const, priority: 0.6 }))];
+  return [...pages, ...(await getAllPosts()).map((post) => ({ url: `${site}/blog/${post.slug}`, lastModified: post.date, changeFrequency: "yearly" as const, priority: 0.6 }))];
 }

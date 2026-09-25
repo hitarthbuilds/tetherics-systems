@@ -3,7 +3,7 @@ export const company = {
   name: "Tetheric Systems",
   legalName: "Tetheric Systems Private Limited",
   url: "https://tethericsystems.com",
-  email: "hitarthdesai01@gmail.com",
+  email: "info@tethericsystems.com",
 };
 
 export const products = {

@@ -4,7 +4,7 @@ import { PostCard } from "@/components/blog/post-card";
 import { Magnetic, Tilt, VelocityMarquee } from "@/components/motion/interactions";
 import { SiteFooter, SiteHeader } from "@/components/site/site-chrome";
 import { BrandCore } from "@/components/three/brand-core";
-import { posts } from "@/lib/blog";
+import { getAllPosts } from "@/lib/posts";
 import { company, products } from "@/lib/product-family";
 import { BrandIntro } from "./brand-intro";
 import { BrandSequence, HERO_PROGRESS, HeroScroll, HeroTitle, HomeMotion, LockupDraw, SignalField, ZoomStatement } from "./family-motion";
@@ -18,7 +18,8 @@ const principles=[
   {label:"KEEP PEOPLE IN CONTROL",title:"The final call stays yours.",text:"Useful software helps you move with judgment. Product access, data availability and approval should stay explicit."},
 ];
 
-export function ProductFamily(){
+export async function ProductFamily(){
+  const posts=await getAllPosts();
   return <div className="product-family"><a className="family-skip" href="#main">Skip to content</a>
     <BrandIntro/>
     <SiteHeader current="/" theme="dark"/>

@@ -1,17 +1,24 @@
+export type ImageBlock = { type: "image"; url: string; alt: string; caption?: string; width?: number; height?: number };
+
 export type Block =
   | { type: "p"; text: string }
   | { type: "h2"; text: string }
   | { type: "quote"; text: string }
-  | { type: "list"; items: string[] };
+  | { type: "list"; items: string[] }
+  | ImageBlock;
+
+export const categories = ["Brand", "Product thinking", "Philosophy", "Security", "Company"] as const;
+export const coverVariants = ["bars", "grid", "orbit", "gate", "bridge"] as const;
 
 export type Post = {
   slug: string;
   title: string;
   dek: string;
-  category: "Brand" | "Product thinking" | "Philosophy" | "Security" | "Company";
+  category: (typeof categories)[number];
   date: string;
   author: string;
-  cover: "bars" | "grid" | "orbit" | "gate" | "bridge";
+  cover: (typeof coverVariants)[number];
+  coverImage?: { url: string; alt: string; width?: number; height?: number };
   featured?: boolean;
   body: Block[];
 };
@@ -122,8 +129,14 @@ export function getPost(slug: string) {
   return posts.find((post) => post.slug === slug);
 }
 
+function blockText(block: Block) {
+  if (block.type === "list") return block.items.join(" ");
+  if (block.type === "image") return block.caption ?? "";
+  return block.text;
+}
+
 export function readingMinutes(post: Post) {
-  const words = post.body.reduce((count, block) => count + (block.type === "list" ? block.items.join(" ") : block.text).split(/\s+/).length, post.dek.split(/\s+/).length);
+  const words = post.body.reduce((count, block) => count + blockText(block).split(/\s+/).length, post.dek.split(/\s+/).length);
   return Math.max(2, Math.round(words / 210));
 }
 

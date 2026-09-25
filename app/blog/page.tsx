@@ -3,7 +3,7 @@ import Link from "next/link";
 import { PostCover, PostMeta } from "@/components/blog/post-card";
 import { PostGrid } from "@/components/blog/post-grid";
 import { SiteFooter, SiteHeader } from "@/components/site/site-chrome";
-import { posts } from "@/lib/blog";
+import { featuredPost, getAllPosts } from "@/lib/posts";
 import "../pages.css";
 
 export const metadata: Metadata = {
@@ -11,8 +11,11 @@ export const metadata: Metadata = {
   description: "Notes from Tetheric Systems on building clearer systems: product thinking, brand, security and the work in between.",
 };
 
-export default function BlogPage() {
-  const featured = posts.find((post) => post.featured) ?? posts[0];
+export const revalidate = 3600;
+
+export default async function BlogPage() {
+  const posts = await getAllPosts();
+  const featured = featuredPost(posts);
   const rest = posts.filter((post) => post !== featured);
   return (
     <div className="page page--journal">

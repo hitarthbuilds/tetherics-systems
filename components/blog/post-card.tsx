@@ -1,9 +1,18 @@
+import Image from "next/image";
 import Link from "next/link";
 import { formatDate, readingMinutes, type Post } from "@/lib/blog";
 
 /** Generative cover art built from the brand's shapes: bars, grids, orbits, gates and bridges. */
 export function PostCover({ post, size = "card" }: { post: Post; size?: "card" | "hero" }) {
   const id = `cover-${post.slug}-${size}`;
+  if (post.coverImage?.url) {
+    return (
+      <div className={`post-cover post-cover--photo post-cover--${size}`}>
+        <Image src={post.coverImage.url} alt={post.coverImage.alt} fill sizes={size === "hero" ? "100vw" : "(max-width: 900px) 100vw, 640px"} priority={size === "hero"} />
+        <i className="post-cover__tint" aria-hidden="true" />
+      </div>
+    );
+  }
   return (
     <div className={`post-cover post-cover--${post.cover} post-cover--${size}`} aria-hidden="true">
       <svg viewBox="0 0 640 400" preserveAspectRatio="xMidYMid slice">

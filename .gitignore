@@ -9,3 +9,6 @@ tmp/
 .DS_Store
 npm-debug.log*
 *.tsbuildinfo
+.data/
+.env*.local
+.env

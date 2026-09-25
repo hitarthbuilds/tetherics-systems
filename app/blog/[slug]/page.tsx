@@ -3,37 +3,30 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PostCard, PostCover, PostMeta } from "@/components/blog/post-card";
 import { SiteFooter, SiteHeader } from "@/components/site/site-chrome";
-import { getPost, posts, type Block } from "@/lib/blog";
+import { PostBody } from "@/components/blog/post-body";
+import { getAllPosts, getPostBySlug } from "@/lib/posts";
 import "../../pages.css";
 
-export const dynamicParams = false;
+export const revalidate = 3600;
 
-export function generateStaticParams() {
-  return posts.map((post) => ({ slug: post.slug }));
+export async function generateStaticParams() {
+  return (await getAllPosts()).map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const post = getPost((await params).slug);
+  const post = await getPostBySlug((await params).slug);
   if (!post) return {};
   return {
     title: `${post.title} — Tetheric Journal`,
     description: post.dek,
-    openGraph: { type: "article", title: post.title, description: post.dek, publishedTime: post.date, authors: [post.author] },
+    openGraph: { type: "article", title: post.title, description: post.dek, publishedTime: post.date, authors: [post.author], images: post.coverImage ? [{ url: post.coverImage.url, alt: post.coverImage.alt }] : undefined },
   };
 }
 
-function Content({ block, first }: { block: Block; first: boolean }) {
-  if (block.type === "h2") return <h2 data-split>{block.text}</h2>;
-  if (block.type === "quote") return <blockquote data-reveal><p>{block.text}</p></blockquote>;
-  if (block.type === "list") return <ul data-reveal="stagger">{block.items.map((item) => <li key={item}>{item}</li>)}</ul>;
-  return <p className={first ? "post-body__lead" : undefined}>{block.text}</p>;
-}
-
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
-  const post = getPost((await params).slug);
+  const post = await getPostBySlug((await params).slug);
   if (!post) notFound();
-  const related = posts.filter((item) => item.slug !== post.slug).slice(0, 2);
-  const firstParagraph = post.body.findIndex((block) => block.type === "p");
+  const related = (await getAllPosts()).filter((item) => item.slug !== post.slug).slice(0, 2);
   return (
     <div className="page page--post">
       <SiteHeader current="/blog" theme="dark" />
@@ -51,7 +44,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             </div>
           </header>
           <div className="post-body" data-theme="light">
-            {post.body.map((block, index) => <Content key={index} block={block} first={index === firstParagraph} />)}
+            <PostBody blocks={post.body} />
             <p className="post-body__sign">— {post.author}</p>
           </div>
         </article>

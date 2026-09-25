@@ -8,7 +8,8 @@ import { prefersReducedMotion, registerMotion, revealLines, startSmoothScroll } 
 /** Lenis for the whole session; resets to the top on every route change. */
 export function SmoothScroll() {
   const pathname = usePathname();
-  useEffect(() => startSmoothScroll(), []);
+  const studio = pathname?.startsWith("/admin") ?? false;
+  useEffect(() => (studio ? undefined : startSmoothScroll()), [studio]);
   useEffect(() => {
     const lenis = (window as Window & { tethericLenis?: { scrollTo: (target: number, options: { immediate: boolean }) => void } }).tethericLenis;
     if (!window.location.hash) lenis?.scrollTo(0, { immediate: true });
@@ -24,8 +25,9 @@ export function Cursor() {
   const dot = useRef<HTMLDivElement>(null);
   const ring = useRef<HTMLDivElement>(null);
   const label = useRef<HTMLSpanElement>(null);
+  const studio = usePathname()?.startsWith("/admin") ?? false;
   useEffect(() => {
-    if (!window.matchMedia("(pointer: fine)").matches || prefersReducedMotion()) return;
+    if (studio || !window.matchMedia("(pointer: fine)").matches || prefersReducedMotion()) return;
     document.documentElement.classList.add("has-cursor");
     let x = -100, y = -100, rx = -100, ry = -100, frame = 0;
     const move = (event: PointerEvent) => {
@@ -58,7 +60,7 @@ export function Cursor() {
       window.removeEventListener("pointerup", up);
       document.removeEventListener("pointerleave", leave);
     };
-  }, []);
+  }, [studio]);
   return (
     <div className="site-cursor" aria-hidden="true">
       <div ref={ring} className="site-cursor__ring"><span ref={label} /></div>

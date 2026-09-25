@@ -14,10 +14,21 @@ Everything is drawn from the official logo:
 
 - `/` — product family home: intro loader, realtime 3D monogram (Babylon.js), pinned logo sequence, products, principles and journal
 - `/about`, `/philosophy` — company and beliefs
-- `/blog`, `/blog/[slug]` — the journal (content in `lib/blog.ts`)
+- `/blog`, `/blog/[slug]` — the journal: built-in essays in `lib/blog.ts` plus articles published from the studio
 - `/records/seerflow`, `/records/auctra`, `/methodology`, `/security` — public product records and standards
 
 `/evidence` and `/records/foundry` redirect to `/about` and `/records/auctra`.
+
+## Journal Studio (`/admin`)
+
+A password-protected editor for the journal. Write an article, drop in a cover photo and inline pictures, preview it exactly as it will appear, then press **Publish** — `/blog`, the article page, the homepage journal and the sitemap refresh immediately. Drafts, unpublish and delete are supported; ⌘S saves a draft.
+
+Production needs two environment variables on the Vercel project:
+
+- `BLOB_READ_WRITE_TOKEN` — added automatically when a Vercel Blob store is connected to the project. Articles are stored as JSON under `cms/posts/`, photos under `journal/`.
+- `ADMIN_PASSWORD` — the studio sign-in password. Changing it signs everyone out. `ADMIN_SESSION_SECRET` is optional and overrides the cookie signing key.
+
+With `npm run dev` and no `ADMIN_PASSWORD`, the studio opens without signing in and saves to the git-ignored `.data/` folder, so you can try it locally.
 
 ## Motion
 

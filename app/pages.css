@@ -187,6 +187,13 @@
 .post-body ul{display:grid;gap:12px;margin:0 0 32px;padding:0;list-style:none}
 .post-body li{position:relative;padding:16px 18px 16px 54px;border:1px solid var(--line);border-radius:14px;background:var(--mist);font-size:17px;line-height:1.6}
 .post-body li:before{content:"";position:absolute;left:20px;top:26px;width:18px;height:3px;border-radius:2px;background:var(--gradient)}
+.post-figure{margin:48px -120px;display:grid;gap:14px}
+.post-figure__frame{position:relative;overflow:hidden;border-radius:22px;background:var(--mist-strong);box-shadow:0 30px 60px -40px rgba(10,21,32,.55)}
+.post-figure__frame img{display:block;width:100%;height:auto;object-fit:cover}
+.post-figure__frame[style] img{height:100%}
+.post-figure.is-portrait{margin-inline:auto;max-width:560px}
+.post-figure figcaption{display:flex;gap:10px;font-size:14px;line-height:1.6;color:var(--subtle)}
+.post-figure figcaption:before{content:"";flex:none;width:18px;height:2px;margin-top:11px;background:var(--gradient)}
 .post-body__sign{margin-top:48px!important;font:500 13px var(--font-code);letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
 
 @media(max-width:1100px){
@@ -221,6 +228,7 @@
   .journal-orbits{width:110vw;right:-50vw;opacity:.6}
   .journal-grid,.page-journal__grid{grid-template-columns:1fr}
   .post-body blockquote{margin-inline:0;padding:32px 28px}
+  .post-figure{margin-inline:0}
   .post-body blockquote:before{left:28px}
 }
 @media(max-width:600px){
