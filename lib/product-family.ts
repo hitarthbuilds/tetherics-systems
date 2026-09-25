@@ -1,4 +1,4 @@
-/** Product-family domains verified over HTTPS on 20 September 2026. */
+/** Product-family domains verified over HTTPS (Auctra re-verified 25 September 2026). */
 export const company = {
   name: "Tetheric Systems",
   legalName: "Tetheric Systems Private Limited",
@@ -16,9 +16,9 @@ export const products = {
     description: "Connected decision intelligence for Indian D2C. Bring orders, payouts, costs and returns into one operating picture.",
   },
   foundry: {
-    name: "Apex Foundry",
-    url: "https://foundry.tethericsystems.com",
-    record: "/records/foundry",
+    name: "Auctra",
+    url: "https://auctra.tethericsystems.com",
+    record: "/records/auctra",
     status: "Private pilot",
     purpose: "Make what matters.",
     description: "A creative workspace for brand research, ideas, copy, images and narrated video drafts. A team of AI specialists, working with you.",

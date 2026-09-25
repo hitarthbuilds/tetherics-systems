@@ -1,13 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, IBM_Plex_Mono } from "next/font/google";
+import { IBM_Plex_Mono, Montserrat, Saira } from "next/font/google";
+import { Cursor, SmoothScroll } from "@/components/motion/site-motion";
 import "./base.css";
-import "./records.css";
-import "./family.css";
-import "./midnight.css";
+import "./site.css";
 
-const archivo = Archivo({
+// Display: a squared, extended face that echoes the TETHERIC wordmark.
+const saira = Saira({
   subsets: ["latin"],
-  variable: "--font-archivo",
+  axes: ["wdth"],
+  variable: "--font-saira",
+  display: "swap",
+});
+
+// Text and labels: the geometric sans of "SYSTEMS PRIVATE LIMITED" and the logo tagline.
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
   display: "swap",
 });
 
@@ -20,9 +28,10 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://tethericsystems.com"),
-  title: "Tetheric Systems — The company behind SeerFlow & Apex Foundry",
+  title: "Tetheric Systems — The company behind SeerFlow & Auctra",
   description:
-    "Tetheric Systems Private Limited builds SeerFlow for D2C decision intelligence and Apex Foundry for brand research and creative work.",
+    "Tetheric Systems Private Limited builds SeerFlow for D2C decision intelligence and Auctra for brand research and creative work. AI, automation and robotics.",
+  applicationName: "Tetheric Systems",
   verification: {
     other: {
       "facebook-domain-verification": "7usm7e0nmxph3drs20a4dzj8fciflf",
@@ -30,7 +39,8 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Tetheric Systems — Clarity inside. Possibility outside.",
-    description: "The company behind SeerFlow and Apex Foundry. Two focused products. One belief in better ways of working.",
+    description: "The company behind SeerFlow and Auctra. Two focused products. One belief in better ways of working.",
+    siteName: "Tetheric Systems",
     type: "website",
   },
   twitter: { card: "summary_large_image" },
@@ -39,14 +49,18 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#100e18",
-  colorScheme: "dark",
+  themeColor: "#ffffff",
+  colorScheme: "light",
 };
+
+// Runs before first paint: flags motion preference and whether the home intro has already played.
+const preflight = `(function(d){try{var r=matchMedia("(prefers-reduced-motion: reduce)").matches;if(!r)d.classList.add("motion-ready");if(r||sessionStorage.getItem("tetheric-intro"))d.classList.add("intro-done")}catch(e){d.classList.add("intro-done")}})(document.documentElement)`;
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${archivo.variable} ${plexMono.variable}`}>
-      <body>{children}</body>
+    <html lang="en" suppressHydrationWarning className={`${saira.variable} ${montserrat.variable} ${plexMono.variable}`}>
+      <head><script dangerouslySetInnerHTML={{ __html: preflight }} /></head>
+      <body><SmoothScroll />{children}<Cursor /></body>
     </html>
   );
 }

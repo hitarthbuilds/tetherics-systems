@@ -6,12 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "node --test tests/"
   },
   "dependencies": {
     "@babylonjs/core": "^8.32.0",
+    "animejs": "^4.5.0",
     "gsap": "^3.13.0",
     "lenis": "^1.3.11",
+    "motion": "^13.4.4",
     "next": "^16.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
